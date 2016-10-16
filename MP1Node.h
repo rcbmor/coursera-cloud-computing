@@ -31,8 +31,18 @@
 enum MsgTypes{
     JOINREQ,
     JOINREP,
+    PING,
     DUMMYLASTMSGTYPE
 };
+
+/**
+ * MemberListMsg
+ */
+typedef struct MemberListItem {
+	int id;
+	short port;
+	long heartbeat;
+} MemberListItem;
 
 /**
  * STRUCT NAME: MessageHdr
@@ -76,6 +86,13 @@ public:
 	void initMemberListTable(Member *memberNode);
 	void printAddress(Address *addr);
 	virtual ~MP1Node();
+	/* new methods */
+	void join_reply(Address *addr);
+	void update(Address *addr, char *data, int size);
+	bool updateMemberList(Address *addr, long heartbeat);
+	void cleanupMemberList(void);
+	void gossip(void);
+	Address mle_addr(MemberListEntry *mle);
 };
 
 #endif /* _MP1NODE_H_ */
