@@ -420,7 +420,7 @@ void MP1Node::gossip(void) {
  */
 void MP1Node::cleanupMemberList() {
 
-	int timeout = 2;
+	int timeout = 5;
 
 	for (vector<MemberListEntry>::iterator it = memberNode->memberList.begin();
 	    it != memberNode->memberList.end(); /*it++*/) {
@@ -430,6 +430,7 @@ void MP1Node::cleanupMemberList() {
         else if (par->getcurrtime() - it->timestamp > timeout) {
 			it = memberNode->memberList.erase(it);
 			log->logNodeRemove(&memberNode->addr, &addr);
+			//logMemberList();
 		} else
             it++;
 	}
@@ -441,4 +442,13 @@ Address MP1Node::mle_addr(MemberListEntry* mle) {
 		memcpy(a.addr, &mle->id, sizeof(int));
 		memcpy(&a.addr[4], &mle->port, sizeof(short));
 		return a;
+}
+
+void MP1Node::logMemberList() {
+    static char s[1024];
+	for (vector<MemberListEntry>::iterator it = memberNode->memberList.begin(); it != memberNode->memberList.end(); it++) {
+		sprintf(s, "MemberListItem id(%d), hb(%ld), ts(%ld)",
+		    it->getid(), it->getheartbeat(), it->gettimestamp() );
+    	log->LOG(&memberNode->addr, s);
+	}
 }

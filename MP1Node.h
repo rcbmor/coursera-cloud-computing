@@ -93,6 +93,7 @@ public:
 	void cleanupMemberList(void);
 	void gossip(void);
 	Address mle_addr(MemberListEntry *mle);
+	void logMemberList(void);
 };
 
 #endif /* _MP1NODE_H_ */
